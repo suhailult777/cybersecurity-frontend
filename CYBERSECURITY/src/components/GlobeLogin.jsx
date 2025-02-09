@@ -93,7 +93,7 @@ const GlobeLogin = () => {
     }
 
     return (
-        <div className="h-screen w-screen bg-gray-900 flex flex-col lg:flex-row overflow-hidden">
+        <div className="h-screen w-screen bg-[#ADD8E6] flex flex-col lg:flex-row overflow-hidden">
 
             <div className="flex-shrink-0 lg:flex-1 lg:w-3/5 p-2 lg:p-4">
                 <div ref={globeRef} className="w-full h-[50vh] lg:h-full" />

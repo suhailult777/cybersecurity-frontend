@@ -14,9 +14,9 @@ export default function App() {
         <Route path="/" element={<Login />} />
         <Route path="/dashboard" element={<Dashboard />} />
         {/* <Route path="/courses/csf" element={<CSFCourse />} />
-        <Route path="/courses/peh" element={<PEHCourse />} />
-        <Route path="/achievements" element={<Achievements />} />
-        <Route path="/profile" element={<Profile />} /> */}
+        <Route path="/courses/peh" element={<PEHCourse />} /> */}
+        {/* <Route path="/achievements" element={<Achievements />} />
+        <Route path="/profile" element={<Profile />} />  */}
       </Routes>
     </Router>
   )
