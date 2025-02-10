@@ -31,6 +31,10 @@ const Dashboard = () => {
         ],
     };
 
+    const handleContinue = () => {
+        navigate("/courses");
+    }
+
     return (
         <div className="h-screen w-screen bg-[#0A0F1C] flex flex-col md:flex-row overflow-hidden">
             {/* Sidebar */}
@@ -130,9 +134,16 @@ const Dashboard = () => {
                         </div>
                     </>
                 ) : activePage === "courses" ? (
-                    <div className="text-white text-xl font-semibold flex items-center justify-center h-full">
-                        📚 Welcome to Courses Page!
+                    <div className="text-white text-xl font-semibold flex flex-col items-center justify-center h-full space-y-2">
+                        <p>📚 Welcome to Courses Page!</p>
+                        <div className="flex justify-center">
+                            <button className="px-4 py-2 text-[10px] text-white font-semibold rounded-md bg-gradient-to-r to-[#1a2a3f] shadow-md transition-all" onClick={handleContinue}>
+                                Continue
+                            </button>
+                        </div>
                     </div>
+
+
                 ) : activePage === "messages" ? (
                     <div className="h-full flex flex-col">
                         <div className="text-white text-lg font-semibold mb-4">Messages</div>
@@ -205,7 +216,7 @@ const Dashboard = () => {
                     <User className="w-6 h-6 text-gray-400 hover:text-[#00E1FF]" />
                 </button>
             </div>
-        </div>
+        </div >
     );
 };
 
