@@ -13,10 +13,10 @@ export default function App() {
       <Routes>
         <Route path="/" element={<Login />} />
         <Route path="/register" element={<RegistrationForm />} />
-        <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/courses" element={<Courses />} />
-        <Route path="/courses/csf" element={<CSFCourse />} />
-        <Route path="/courses/peh" element={<PEHCourse />} />
+        <Route path="/dashboard" element={<Dashboard />}>          <Route path="courses" element={<Courses />} />
+          <Route path="csf" element={<CSFCourse />} />
+          <Route path="peh" element={<PEHCourse />} />
+        </Route>
         <Route path="/leaderboard" element={<Leaderboard />} />
       </Routes>
     </Router>

@@ -1,14 +1,34 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { User, Globe, BookOpen, FileText, MessageSquare, Users } from "lucide-react";
 import { Line } from "react-chartjs-2";
 import { Chart, registerables } from "chart.js";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import CoursePage from "./Courses/courses";
+import CSFCourse from "./Courses/CSFCourse";
+import PEHCourse from "./Courses/PEHCourse";
 
 Chart.register(...registerables);
 
 const Dashboard = () => {
     const navigate = useNavigate(); // Hook for navigation
     const [activePage, setActivePage] = useState("dashboard"); // State change
+    const { courseId } = useParams(); // Params for course selection
+
+    useEffect(() => {
+        if (courseId) {
+            setActivePage(courseId);
+        } else {
+            setActivePage("dashboard");
+        }
+    }, [courseId]);
+
+    useEffect(() => {
+        if (activePage === "dashboard") {
+            navigate("/dashboard");
+        } else {
+            navigate(`/dashboard/${activePage}`);
+        }
+    }, [activePage, navigate]);
 
     // Dummy data for network traffic chart
     const data = {
@@ -30,10 +50,6 @@ const Dashboard = () => {
             },
         ],
     };
-
-    const handleContinue = () => {
-        navigate("/courses");
-    }
 
     return (
         <div className="h-screen w-screen bg-[#0A0F1C] flex flex-col md:flex-row overflow-hidden">
@@ -134,14 +150,19 @@ const Dashboard = () => {
                         </div>
                     </>
                 ) : activePage === "courses" ? (
-                    <div className="text-white text-xl font-semibold flex flex-col items-center justify-center h-full space-y-2">
-                        <p>📚 Welcome to Courses Page!</p>
-                        <div className="flex justify-center">
-                            <button className="px-4 py-2 text-[10px] text-white font-semibold rounded-md bg-gradient-to-r to-[#1a2a3f] shadow-md transition-all" onClick={handleContinue}>
-                                Continue
-                            </button>
-                        </div>
-                    </div>
+                    <CoursePage setActiveCourse={setActivePage} />
+                ) : activePage === "csf" ? (
+                    <CSFCourse />
+                ) : activePage === "peh" ? (
+                    <PEHCourse />
+                    // <div className="text-white text-xl font-semibold flex flex-col items-center justify-center h-full space-y-2">
+                    //     <p>📚 Welcome to Courses Page!</p>
+                    //     <div className="flex justify-center">
+                    //         <button className="px-4 py-2 text-[10px] text-white font-semibold rounded-md bg-gradient-to-r to-[#1a2a3f] shadow-md transition-all" onClick={handleContinue}>
+                    //             Continue
+                    //         </button>
+                    //     </div>
+                    // </div>
 
 
                 ) : activePage === "messages" ? (
