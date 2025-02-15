@@ -97,7 +97,6 @@ const GlobeLogin = () => {
     };
 
     const handleRegister = () => {
-        // Navigate to the registration route
         navigate("/register");
     };
 
@@ -111,10 +110,8 @@ const GlobeLogin = () => {
             {/* Form Section */}
             <div className="flex-1 w-full lg:w-2/5 p-4 lg:p-8 flex items-center justify-center min-h-[50vh]">
                 <div className="w-full max-w-[90%] lg:max-w-[400px] space-y-4 lg:space-y-6 pb-4">
-                    <div className="flex justify-between items-center">
-                        <h2 className="text-lg lg:text-xl font-medium text-cyan-400">
-                            LOGIN
-                        </h2>
+                    {/* Removed the LOGIN h2 and placed REGISTER to the right */}
+                    <div className="flex justify-end items-center">
                         <button
                             onClick={handleRegister}
                             className="text-cyan-400 text-xs lg:text-sm hover:text-cyan-300"
@@ -144,7 +141,6 @@ const GlobeLogin = () => {
                                 className="w-full text-sm lg:text-base bg-gray-800/50 border border-gray-700 rounded-sm p-2 lg:p-2.5 text-gray-100 focus:outline-none focus:border-cyan-400"
                                 placeholder="Enter your password"
                             />
-                            {/* Forgot password and LOGIN side by side */}
                             <div className="flex items-center justify-between">
                                 <button
                                     type="button"
