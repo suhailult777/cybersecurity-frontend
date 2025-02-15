@@ -1,34 +1,27 @@
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
 import { User, Globe, BookOpen, FileText, MessageSquare, Users } from "lucide-react";
 import { Line } from "react-chartjs-2";
 import { Chart, registerables } from "chart.js";
-import { useNavigate, useParams } from "react-router-dom";
-import CoursePage from "./Courses/courses";
-import CSFCourse from "./Courses/CSFCourse";
-import PEHCourse from "./Courses/PEHCourse";
+import { useNavigate, useLocation } from "react-router-dom";
+
+import CoursePage from "./courses";
+import CSFCourse from "./CSFCourse";
+import PEHCourse from "./PEHCourse";
 
 Chart.register(...registerables);
 
 const Dashboard = () => {
-    const navigate = useNavigate(); // Hook for navigation
-    const [activePage, setActivePage] = useState("dashboard"); // State change
-    const { courseId } = useParams(); // Params for course selection
+    const navigate = useNavigate();
+    const location = useLocation();
+    const [activePage, setActivePage] = useState("dashboard");
 
+    // Synchronize activePage with the URL
     useEffect(() => {
-        if (courseId) {
-            setActivePage(courseId);
-        } else {
-            setActivePage("dashboard");
-        }
-    }, [courseId]);
-
-    useEffect(() => {
-        if (activePage === "dashboard") {
-            navigate("/dashboard");
-        } else {
-            navigate(`/dashboard/${activePage}`);
-        }
-    }, [activePage, navigate]);
+        // The URL is expected to be like "/dashboard" or "/dashboard/courses" or "/dashboard/csf"
+        const pathParts = location.pathname.split("/");
+        const page = pathParts.length > 2 ? pathParts[2] : "dashboard";
+        setActivePage(page);
+    }, [location.pathname]);
 
     // Dummy data for network traffic chart
     const data = {
@@ -71,31 +64,22 @@ const Dashboard = () => {
                 {/* Navigation */}
                 <nav className="space-y-1">
                     <button
-                        className={`w-full flex items-center gap-3 p-2 sm:p-3 rounded ${activePage === "dashboard"
-                            ? "bg-[#1B2341] text-[#00E1FF]"
-                            : "text-gray-400 hover:bg-[#1B2341] hover:text-[#00E1FF]"
-                            }`}
-                        onClick={() => setActivePage("dashboard")}
+                        className="w-full flex items-center gap-3 p-2 sm:p-3 text-gray-400 hover:bg-[#1B2341] hover:text-[#00E1FF] rounded"
+                        onClick={() => navigate("/dashboard")}
                     >
                         <Globe size={18} />
                         <span className="text-sm">DASHBOARD</span>
                     </button>
                     <button
-                        className={`w-full flex items-center gap-3 p-2 sm:p-3 rounded ${activePage === "courses"
-                            ? "bg-[#1B2341] text-[#00E1FF]"
-                            : "text-gray-400 hover:bg-[#1B2341] hover:text-[#00E1FF]"
-                            }`}
-                        onClick={() => setActivePage("courses")}
+                        className="w-full flex items-center gap-3 p-2 sm:p-3 text-gray-400 hover:bg-[#1B2341] hover:text-[#00E1FF] rounded"
+                        onClick={() => navigate("/dashboard/courses")}
                     >
                         <BookOpen size={18} />
                         <span className="text-sm">COURSES</span>
                     </button>
                     <button
-                        className={`w-full flex items-center gap-3 p-2 sm:p-3 rounded ${activePage === "messages"
-                            ? "bg-[#1B2341] text-[#00E1FF]"
-                            : "text-gray-400 hover:bg-[#1B2341] hover:text-[#00E1FF]"
-                            }`}
-                        onClick={() => setActivePage("messages")}
+                        className="w-full flex items-center gap-3 p-2 sm:p-3 text-gray-400 hover:bg-[#1B2341] hover:text-[#00E1FF] rounded"
+                        onClick={() => navigate("/dashboard/messages")}
                     >
                         <MessageSquare size={18} />
                         <span className="text-sm">MESSAGES</span>
@@ -111,11 +95,8 @@ const Dashboard = () => {
                         <span className="text-sm">LEADERBOARD</span>
                     </button>
                     <button
-                        className={`w-full flex items-center gap-3 p-2 sm:p-3 rounded ${activePage === "profile"
-                            ? "bg-[#1B2341] text-[#00E1FF]"
-                            : "text-gray-400 hover:bg-[#1B2341] hover:text-[#00E1FF]"
-                            }`}
-                        onClick={() => setActivePage("profile")}
+                        className="w-full flex items-center gap-3 p-2 sm:p-3 text-gray-400 hover:bg-[#1B2341] hover:text-[#00E1FF] rounded"
+                        onClick={() => navigate("/dashboard/profile")}
                     >
                         <Users size={18} />
                         <span className="text-sm">PROFILE</span>
@@ -125,7 +106,7 @@ const Dashboard = () => {
 
             {/* Main Content */}
             <div className="flex-1 bg-gradient-to-b from-[#0A0F1C] to-[#0F1631] p-4 sm:p-6 md:p-8 lg:p-10 xl:p-12 overflow-auto">
-                {activePage === "dashboard" ? (
+                {activePage === "dashboard" && (
                     <>
                         <div className="text-white text-lg font-semibold">Threat Overview</div>
                         {/* Threat Status */}
@@ -149,23 +130,11 @@ const Dashboard = () => {
                             <Line data={data} options={{ responsive: true, maintainAspectRatio: false }} />
                         </div>
                     </>
-                ) : activePage === "courses" ? (
-                    <CoursePage setActiveCourse={setActivePage} />
-                ) : activePage === "csf" ? (
-                    <CSFCourse />
-                ) : activePage === "peh" ? (
-                    <PEHCourse />
-                    // <div className="text-white text-xl font-semibold flex flex-col items-center justify-center h-full space-y-2">
-                    //     <p>📚 Welcome to Courses Page!</p>
-                    //     <div className="flex justify-center">
-                    //         <button className="px-4 py-2 text-[10px] text-white font-semibold rounded-md bg-gradient-to-r to-[#1a2a3f] shadow-md transition-all" onClick={handleContinue}>
-                    //             Continue
-                    //         </button>
-                    //     </div>
-                    // </div>
-
-
-                ) : activePage === "messages" ? (
+                )}
+                {activePage === "courses" && <CoursePage />}
+                {activePage === "csf" && <CSFCourse />}
+                {activePage === "peh" && <PEHCourse />}
+                {activePage === "messages" && (
                     <div className="h-full flex flex-col">
                         <div className="text-white text-lg font-semibold mb-4">Messages</div>
                         {/* Message List */}
@@ -194,7 +163,8 @@ const Dashboard = () => {
                             <button className="bg-[#00E1FF] text-[#d7d9e4] p-2 rounded-r-lg">Send</button>
                         </div>
                     </div>
-                ) : activePage === "profile" ? (
+                )}
+                {activePage === "profile" && (
                     <div className="h-full flex flex-col items-center justify-center text-white">
                         <h1 className="text-2xl font-semibold mb-4">User Profile</h1>
                         <div className="bg-[#1B2341] p-6 rounded-lg shadow-lg w-full max-w-md">
@@ -228,7 +198,7 @@ const Dashboard = () => {
                             </div>
                         </div>
                     </div>
-                ) : null}
+                )}
             </div>
 
             {/* Right Sidebar */}
@@ -237,7 +207,7 @@ const Dashboard = () => {
                     <User className="w-6 h-6 text-gray-400 hover:text-[#00E1FF]" />
                 </button>
             </div>
-        </div >
+        </div>
     );
 };
 

@@ -144,23 +144,23 @@ const GlobeLogin = () => {
                                 className="w-full text-sm lg:text-base bg-gray-800/50 border border-gray-700 rounded-sm p-2 lg:p-2.5 text-gray-100 focus:outline-none focus:border-cyan-400"
                                 placeholder="Enter your password"
                             />
-                            <div className="flex justify-end">
+                            {/* Forgot password and LOGIN side by side */}
+                            <div className="flex items-center justify-between">
                                 <button
                                     type="button"
                                     className="text-cyan-400 text-[10px] lg:text-xs hover:text-cyan-300"
                                 >
                                     FORGOT PASSWORD?
                                 </button>
+                                <button
+                                    type="submit"
+                                    onClick={handleLogin}
+                                    className="text-sm lg:text-base bg-cyan-500/20 text-cyan-400 p-2 lg:p-2.5 rounded-sm hover:bg-cyan-500/30 transition-colors"
+                                >
+                                    LOGIN
+                                </button>
                             </div>
                         </div>
-
-                        <button
-                            type="submit"
-                            onClick={handleLogin}
-                            className="w-full text-sm lg:text-base bg-cyan-500/20 text-cyan-400 p-2 lg:p-2.5 rounded-sm hover:bg-cyan-500/30 transition-colors"
-                        >
-                            LOGIN
-                        </button>
                     </form>
                 </div>
             </div>

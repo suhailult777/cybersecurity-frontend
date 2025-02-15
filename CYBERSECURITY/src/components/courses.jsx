@@ -1,8 +1,10 @@
 import React from 'react';
 import { FolderIcon, Search, Bell, User } from 'lucide-react';
-import PropTypes from 'prop-types';
+import { useNavigate } from 'react-router-dom';
 
-const CoursePage = ({ setActiveCourse }) => {  // Changed to accept setActiveCourse prop
+const CoursePage = () => {
+    const navigate = useNavigate();
+
     const courses = [
         { title: 'Cyber Security Foundation (CSF)', id: 'csf' },
         { title: 'Professional Ethical Hacking (PEH)', id: 'peh' },
@@ -11,18 +13,14 @@ const CoursePage = ({ setActiveCourse }) => {  // Changed to accept setActiveCou
         { title: 'Professional Cyber Forensics', id: 'cyber-forensics' }
     ];
 
-    // Modified handler to use setActiveCourse
+    // Handler to navigate to the specific course route
     const handleCourseClick = (courseId) => {
-        setActiveCourse(courseId);
-    };
-
-    CoursePage.propTypes = {
-        setActiveCourse: PropTypes.func.isRequired,
+        navigate(`/dashboard/${courseId}`);
     };
 
     return (
         <div className="h-full bg-gradient-to-b from-[#0A0F1C] to-[#0F1631]">
-            {/* Top Search Bar - Remained exactly the same */}
+            {/* Top Search Bar */}
             <div className="border-b border-[#1B2341] p-4 flex justify-between items-center">
                 <div className="flex items-center space-x-4">
                     <button className="bg-teal-500 text-white px-3 py-1 rounded text-sm">ONLINE</button>
@@ -44,7 +42,7 @@ const CoursePage = ({ setActiveCourse }) => {  // Changed to accept setActiveCou
                 </div>
             </div>
 
-            {/* Course Grid - Remained visually identical */}
+            {/* Course Grid */}
             <main className="p-8">
                 <h1 className="text-xl font-medium text-gray-300 mb-8 tracking-wide">COURSES</h1>
                 <div className="hidden lg:grid lg:grid-cols-3 xl:grid-cols-4 gap-6">
@@ -52,7 +50,7 @@ const CoursePage = ({ setActiveCourse }) => {  // Changed to accept setActiveCou
                         <div
                             key={course.id}
                             className="bg-[#1B2341] p-4 rounded-lg hover:bg-[#232d4d] transition-colors cursor-pointer"
-                            onClick={() => setActiveCourse(course.id)}
+                            onClick={() => handleCourseClick(course.id)}
                         >
                             <FolderIcon className="h-12 w-12 text-teal-500 mb-4" />
                             <h3 className="text-sm">{course.title}</h3>
@@ -74,6 +72,10 @@ const CoursePage = ({ setActiveCourse }) => {  // Changed to accept setActiveCou
             </main>
         </div>
     );
+};
+
+CoursePage.propTypes = {
+    // No props needed now since we're using navigation.
 };
 
 export default CoursePage;

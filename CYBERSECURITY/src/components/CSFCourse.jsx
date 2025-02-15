@@ -1,8 +1,46 @@
-import React from 'react';
+import React from "react";
+import { useNavigate, useLocation } from "react-router-dom";
+import { ChevronLeft } from "lucide-react";
 
 const CSFCourse = () => {
+    const navigate = useNavigate();
+    const location = useLocation();
+
+    // Handle back navigation
+    const handleBack = () => {
+        navigate("/dashboard/courses"); // Redirect to main course page
+    };
+
     return (
         <div className="p-6 text-white">
+            {/* Breadcrumb Navigation */}
+            <div className="flex items-center text-sm text-gray-400 mb-6">
+                <span
+                    className="hover:text-[#00E1FF] cursor-pointer"
+                    onClick={() => navigate("/dashboard/courses")}
+                >
+                    Courses
+                </span>
+                <span className="mx-2">/</span>
+                <span className="text-[#00E1FF]">CSF Course</span>
+                {location.pathname.includes("videos") && (
+                    <>
+                        <span className="mx-2">/</span>
+                        <span className="text-[#00E1FF]">Videos</span>
+                    </>
+                )}
+            </div>
+
+            {/* Back Button */}
+            <button
+                onClick={handleBack}
+                className="flex items-center text-[#00E1FF] hover:text-[#00cce5] mb-6"
+            >
+                <ChevronLeft className="w-5 h-5" />
+                <span>Back to Courses</span>
+            </button>
+
+            {/* Course Title */}
             <h1 className="text-3xl font-bold mb-6">CYBER SECURITY FOUNDATION (CSF)</h1>
 
             {/* Course Description */}
