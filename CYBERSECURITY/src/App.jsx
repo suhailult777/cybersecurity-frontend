@@ -1,8 +1,8 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Login from "./components/GlobeLogin";
+import RegistrationForm from "./components/RegistrationForm";
 import Dashboard from "./components/Dashboard";
 import Leaderboard from "./components/Leaderboard";
-import RegistrationForm from "./components/RegistrationForm";
 
 export default function App() {
   return (
