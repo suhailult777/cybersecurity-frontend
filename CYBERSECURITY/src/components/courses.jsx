@@ -1,5 +1,5 @@
 import React from 'react';
-import { FolderIcon, Search, Bell, User } from 'lucide-react';
+import { FolderIcon, Search, Bell } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
 const CoursePage = () => {
@@ -35,10 +35,6 @@ const CoursePage = () => {
                         <Search className="absolute right-2 top-1.5 h-4 w-4 text-gray-400" />
                     </div>
                     <Bell className="h-5 w-5 text-gray-400" />
-                    <div className="flex items-center space-x-2">
-                        <User className="h-5 w-5 text-gray-400" />
-                        <span className="text-sm text-gray-200">User Account ▾</span>
-                    </div>
                 </div>
             </div>
 

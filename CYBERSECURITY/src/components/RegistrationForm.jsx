@@ -8,6 +8,8 @@ const RegistrationForm = () => {
         name: "",
         email: "",
         CollegeName: "",
+        icCode: "",           // New field
+        termsAccepted: false, // New checkbox state
     });
     const [errors, setErrors] = useState({});
     const [submitted, setSubmitted] = useState(false);
@@ -17,24 +19,27 @@ const RegistrationForm = () => {
     const validateEmail = (email) => /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(email);
 
     const handleChange = (e) => {
-        const { name, value } = e.target;
-        setFormData({ ...formData, [name]: value });
+        const { name, value, type, checked } = e.target;
+        const newValue = type === "checkbox" ? checked : value;
+
+        setFormData({ ...formData, [name]: newValue });
 
         setErrors((prevErrors) => {
             const newErrors = { ...prevErrors };
-            if (name === "name" && value.trim() === "") {
+            // Existing validations
+            if (name === "name" && newValue.trim() === "") {
                 newErrors.name = "Name is required";
             } else {
                 delete newErrors.name;
             }
 
-            if (name === "email" && !validateEmail(value)) {
+            if (name === "email" && !validateEmail(newValue)) {
                 newErrors.email = "Invalid email address";
             } else {
                 delete newErrors.email;
             }
 
-            if (name === "CollegeName" && value.trim() === "") {
+            if (name === "CollegeName" && newValue.trim() === "") {
                 newErrors.CollegeName = "College Name cannot be empty";
             } else {
                 delete newErrors.CollegeName;
@@ -46,14 +51,26 @@ const RegistrationForm = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        if (Object.keys(errors).length === 0 && formData.name && formData.email && formData.CollegeName) {
+        // Submit only if no errors and required fields are filled
+        if (
+            Object.keys(errors).length === 0 &&
+            formData.name &&
+            formData.email &&
+            formData.CollegeName
+        ) {
             setSubmitted(true);
             console.log("Form submitted:", formData);
-            setFormData({ name: "", email: "", CollegeName: "" });
+            setFormData({
+                name: "",
+                email: "",
+                CollegeName: "",
+                icCode: "",
+                termsAccepted: false,
+            });
         }
     };
 
-    // Three.js Globe Setup
+    // Three.js Globe Setup (unchanged)
     const globeRef = useRef(null);
     const rendererRef = useRef(null);
     const sphereRef = useRef(null);
@@ -140,12 +157,17 @@ const RegistrationForm = () => {
                 <div className="w-full max-w-[90%] lg:max-w-[400px] space-y-4 lg:space-y-6 pb-4">
                     <div className="flex justify-between items-center">
                         <h2 className="text-lg lg:text-xl font-medium text-cyan-400">REGISTER</h2>
-                        <button onClick={() => navigate("/")} className="bg-black text-cyan-400 px-3 py-1 rounded-md text-xs lg:text-sm hover:bg-gray-800">
+                        <button
+                            onClick={() => navigate("/")}
+                            className="bg-black text-cyan-400 px-3 py-1 rounded-md text-xs lg:text-sm hover:bg-gray-800"
+                        >
                             LOGIN
                         </button>
                     </div>
 
-                    {submitted && <p className="text-green-500 text-center">Form submitted successfully!</p>}
+                    {submitted && (
+                        <p className="text-green-500 text-center">Form submitted successfully!</p>
+                    )}
 
                     <form onSubmit={handleSubmit} className="space-y-4">
                         <div>
@@ -181,10 +203,42 @@ const RegistrationForm = () => {
                                 className="w-full p-2 bg-gray-700 text-white rounded-md focus:outline-none focus:border-cyan-400"
                                 rows="3"
                             />
-                            {errors.CollegeName && <p className="text-red-500 text-sm">{errors.CollegeName}</p>}
+                            {errors.CollegeName && (
+                                <p className="text-red-500 text-sm">{errors.CollegeName}</p>
+                            )}
                         </div>
 
-                        <button type="submit" className="w-full bg-black text-cyan-400 py-2 rounded-md hover:bg-gray-800">
+                        {/* NEW: IC Code field */}
+                        <div>
+                            <label className="block text-cyan-400 text-sm">IC Code</label>
+                            <input
+                                type="text"
+                                name="icCode"
+                                value={formData.icCode}
+                                onChange={handleChange}
+                                className="w-full p-2 bg-gray-700 text-white rounded-md focus:outline-none focus:border-cyan-400"
+                            />
+                        </div>
+
+                        {/* NEW: Terms & Conditions checkbox */}
+                        <div className="flex items-center gap-2">
+                            <input
+                                type="checkbox"
+                                name="termsAccepted"
+                                checked={formData.termsAccepted}
+                                onChange={handleChange}
+                                className="h-4 w-4 text-cyan-400 focus:outline-none focus:ring-0"
+                            />
+                            <label className="text-cyan-400 text-sm">
+                                I accept all{" "}
+                                <span className="underline">terms and conditions</span>
+                            </label>
+                        </div>
+
+                        <button
+                            type="submit"
+                            className="w-full bg-black text-cyan-400 py-2 rounded-md hover:bg-gray-800"
+                        >
                             REGISTER
                         </button>
                     </form>

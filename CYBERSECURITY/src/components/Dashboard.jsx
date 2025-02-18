@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { User, Globe, BookOpen, FileText, MessageSquare, Users } from "lucide-react";
+import { User, Globe, BookOpen, FileText, MessageSquare, Users, LogOut } from "lucide-react";
 import { Line } from "react-chartjs-2";
 import { Chart, registerables } from "chart.js";
 import { useNavigate, useLocation } from "react-router-dom";
@@ -7,6 +7,10 @@ import { useNavigate, useLocation } from "react-router-dom";
 import CoursePage from "./courses";
 import CSFCourse from "./CSFCourse";
 import PEHCourse from "./PEHCourse";
+import Profile from "./Profile";
+import CTFPEH from "./CTFPEH";
+
+
 
 Chart.register(...registerables);
 
@@ -134,6 +138,8 @@ const Dashboard = () => {
                 {activePage === "courses" && <CoursePage />}
                 {activePage === "csf" && <CSFCourse />}
                 {activePage === "peh" && <PEHCourse />}
+                {activePage === "profile" && <Profile />}
+                {activePage === "ctfpeh" && <CTFPEH />}
                 {activePage === "messages" && (
                     <div className="h-full flex flex-col">
                         <div className="text-white text-lg font-semibold mb-4">Messages</div>
@@ -164,49 +170,23 @@ const Dashboard = () => {
                         </div>
                     </div>
                 )}
-                {activePage === "profile" && (
-                    <div className="h-full flex flex-col items-center justify-center text-white">
-                        <h1 className="text-2xl font-semibold mb-4">User Profile</h1>
-                        <div className="bg-[#1B2341] p-6 rounded-lg shadow-lg w-full max-w-md">
-                            <div className="flex items-center mb-4">
-                                <div className="h-16 w-16 bg-[#0A0F1C] rounded-full flex items-center justify-center">
-                                    <User className="w-10 h-10 text-[#00E1FF]" />
-                                </div>
-                                <div className="ml-4">
-                                    <h2 className="text-xl font-bold">Admin Name</h2>
-                                    <p className="text-gray-400">admin@example.com</p>
-                                </div>
-                            </div>
-                            <div className="mb-4">
-                                <h3 className="text-lg font-semibold">About Me</h3>
-                                <p className="text-gray-400">I am a cybersecurity expert with over 10 years of experience.</p>
-                            </div>
-                            <div className="mb-4">
-                                <h3 className="text-lg font-semibold">Skills</h3>
-                                <ul className="list-disc list-inside text-gray-400">
-                                    <li>Network Security</li>
-                                    <li>Penetration Testing</li>
-                                    <li>Threat Analysis</li>
-                                </ul>
-                            </div>
-                            <div>
-                                <h3 className="text-lg font-semibold">Achievements</h3>
-                                <ul className="list-disc list-inside text-gray-400">
-                                    <li>Certified Ethical Hacker</li>
-                                    <li>Top 10 Cybersecurity Expert 2022</li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                )}
             </div>
 
             {/* Right Sidebar */}
-            <div className="w-16 bg-[#0F1631] border-l border-[#1B2341] flex flex-col items-center py-6 space-y-6">
-                <button className="p-2 rounded-full hover:bg-[#1B2341]">
-                    <User className="w-6 h-6 text-gray-400 hover:text-[#00E1FF]" />
+            <div className="flex flex-col w-35 h-full bg-[#0F1631] border-l border-[#1B2341] p-4 items-start justify-start space-y-4">
+                {/* Logout Button */}
+                <button
+                    className="flex items-center gap-2 bg-[#2A3358] text-white py-2 px-3 rounded-md hover:bg-[#343E66]"
+                    onClick={() => {
+                        localStorage.removeItem("user");
+                        navigate("/");
+                    }}
+                >
+                    <LogOut className="w-4.5 h-5 text-white" />
+                    <span>Logout</span>
                 </button>
             </div>
+
         </div>
     );
 };
