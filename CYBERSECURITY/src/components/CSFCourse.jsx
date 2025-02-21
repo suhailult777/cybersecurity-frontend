@@ -1,6 +1,7 @@
 import React from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { ChevronLeft } from "lucide-react";
+import Footer from "./Footer";
 
 const CSFCourse = () => {
     const navigate = useNavigate();
@@ -156,6 +157,7 @@ const CSFCourse = () => {
                     </div>
                 </div>
             </section >
+            <Footer />
         </div >
     );
 };

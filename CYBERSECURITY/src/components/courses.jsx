@@ -1,6 +1,7 @@
 import React from 'react';
 import { FolderIcon, Search, Bell } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import Footer from "./Footer";
 
 const CoursePage = () => {
     const navigate = useNavigate();
@@ -66,6 +67,7 @@ const CoursePage = () => {
                     ))}
                 </div>
             </main>
+            <Footer />
         </div>
     );
 };

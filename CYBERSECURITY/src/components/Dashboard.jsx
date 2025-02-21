@@ -3,6 +3,7 @@ import { User, Globe, BookOpen, FileText, MessageSquare, Users, LogOut } from "l
 import { Line } from "react-chartjs-2";
 import { Chart, registerables } from "chart.js";
 import { useNavigate, useLocation } from "react-router-dom";
+import Footer from "./Footer";
 
 import CoursePage from "./courses";
 import CSFCourse from "./CSFCourse";
@@ -186,7 +187,7 @@ const Dashboard = () => {
                     <span>Logout</span>
                 </button>
             </div>
-
+            <Footer />
         </div>
     );
 };

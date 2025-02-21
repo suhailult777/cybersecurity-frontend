@@ -1,4 +1,5 @@
 import React from "react";
+import Footer from "./Footer";
 
 const Leaderboard = () => {
     // Dummy leaderboard data
@@ -33,6 +34,7 @@ const Leaderboard = () => {
                     </tbody>
                 </table>
             </div>
+            <Footer />
         </div>
     );
 };

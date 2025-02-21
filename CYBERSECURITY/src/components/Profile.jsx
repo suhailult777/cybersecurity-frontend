@@ -1,5 +1,6 @@
 import React from 'react';
 import { User } from 'lucide-react';
+import Footer from "./Footer";
 
 const Profile = () => {
     return (
@@ -110,6 +111,7 @@ const Profile = () => {
                     </div>
                 </div>
             </div>
+            <Footer />
         </div>
     );
 };

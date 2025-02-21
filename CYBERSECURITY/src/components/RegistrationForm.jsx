@@ -1,15 +1,17 @@
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import * as THREE from "three";
+import Footer from "./Footer";
 
 const RegistrationForm = () => {
-    // Form state
+    // Form state updated with firstname and lastname
     const [formData, setFormData] = useState({
-        name: "",
+        firstname: "",
+        lastname: "",
         email: "",
         CollegeName: "",
-        icCode: "",           // New field
-        termsAccepted: false, // New checkbox state
+        icCode: "",
+        termsAccepted: false,
     });
     const [errors, setErrors] = useState({});
     const [submitted, setSubmitted] = useState(false);
@@ -26,11 +28,17 @@ const RegistrationForm = () => {
 
         setErrors((prevErrors) => {
             const newErrors = { ...prevErrors };
-            // Existing validations
-            if (name === "name" && newValue.trim() === "") {
-                newErrors.name = "Name is required";
+            // Updated validations for firstname and lastname
+            if (name === "firstname" && newValue.trim() === "") {
+                newErrors.firstname = "First name is required";
             } else {
-                delete newErrors.name;
+                delete newErrors.firstname;
+            }
+
+            if (name === "lastname" && newValue.trim() === "") {
+                newErrors.lastname = "Last name is required";
+            } else {
+                delete newErrors.lastname;
             }
 
             if (name === "email" && !validateEmail(newValue)) {
@@ -51,17 +59,19 @@ const RegistrationForm = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        // Submit only if no errors and required fields are filled
+        // Updated submit validation to check firstname and lastname
         if (
             Object.keys(errors).length === 0 &&
-            formData.name &&
+            formData.firstname &&
+            formData.lastname &&
             formData.email &&
             formData.CollegeName
         ) {
             setSubmitted(true);
             console.log("Form submitted:", formData);
             setFormData({
-                name: "",
+                firstname: "",
+                lastname: "",
                 email: "",
                 CollegeName: "",
                 icCode: "",
@@ -171,15 +181,27 @@ const RegistrationForm = () => {
 
                     <form onSubmit={handleSubmit} className="space-y-4">
                         <div>
-                            <label className="block text-cyan-400 text-sm">Name</label>
+                            <label className="block text-cyan-400 text-sm">First Name</label>
                             <input
                                 type="text"
-                                name="name"
-                                value={formData.name}
+                                name="firstname"
+                                value={formData.firstname}
                                 onChange={handleChange}
                                 className="w-full p-2 bg-gray-700 text-white rounded-md focus:outline-none focus:border-cyan-400"
                             />
-                            {errors.name && <p className="text-red-500 text-sm">{errors.name}</p>}
+                            {errors.firstname && <p className="text-red-500 text-sm">{errors.firstname}</p>}
+                        </div>
+
+                        <div>
+                            <label className="block text-cyan-400 text-sm">Last Name</label>
+                            <input
+                                type="text"
+                                name="lastname"
+                                value={formData.lastname}
+                                onChange={handleChange}
+                                className="w-full p-2 bg-gray-700 text-white rounded-md focus:outline-none focus:border-cyan-400"
+                            />
+                            {errors.lastname && <p className="text-red-500 text-sm">{errors.lastname}</p>}
                         </div>
 
                         <div>
@@ -208,7 +230,6 @@ const RegistrationForm = () => {
                             )}
                         </div>
 
-                        {/* NEW: IC Code field */}
                         <div>
                             <label className="block text-cyan-400 text-sm">IC Code</label>
                             <input
@@ -220,7 +241,6 @@ const RegistrationForm = () => {
                             />
                         </div>
 
-                        {/* NEW: Terms & Conditions checkbox */}
                         <div className="flex items-center gap-2">
                             <input
                                 type="checkbox"
@@ -244,6 +264,7 @@ const RegistrationForm = () => {
                     </form>
                 </div>
             </div>
+            <Footer />
         </div>
     );
 };

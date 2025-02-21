@@ -1,6 +1,7 @@
 import { useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import * as THREE from "three";
+import Footer from "./Footer";
 
 const GlobeLogin = () => {
     const globeRef = useRef(null);
@@ -160,6 +161,7 @@ const GlobeLogin = () => {
                     </form>
                 </div>
             </div>
+            <Footer />
         </div>
     );
 };

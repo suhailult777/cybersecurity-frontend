@@ -1,6 +1,7 @@
 import React from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { ChevronLeft } from "lucide-react";
+import Footer from "./Footer";
 
 const PEHCourse = () => {
     const navigate = useNavigate();
@@ -186,6 +187,7 @@ const PEHCourse = () => {
                     </div>
                 </div>
             </section>
+            <Footer />
         </div>
     );
 };

@@ -1,6 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { ChevronLeft } from "lucide-react";
+import Footer from "./Footer";
 
 const CTFPEH = () => {
     const navigate = useNavigate();
@@ -60,6 +61,7 @@ const CTFPEH = () => {
                     </div>
                 ))}
             </div>
+            <Footer />
         </div>
     );
 };
