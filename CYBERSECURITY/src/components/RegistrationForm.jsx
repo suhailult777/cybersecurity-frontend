@@ -4,90 +4,131 @@ import * as THREE from "three";
 import Footer from "./Footer";
 
 const RegistrationForm = () => {
-    // Form state updated with firstname and lastname
+    // Form state
     const [formData, setFormData] = useState({
-        firstname: "",
-        lastname: "",
+        fname: "",
+        lname: "",
         email: "",
-        CollegeName: "",
-        icCode: "",
+        institution_id: "",
         termsAccepted: false,
+
     });
+
     const [errors, setErrors] = useState({});
     const [submitted, setSubmitted] = useState(false);
+    const [errorMessage, setErrorMessage] = useState("");
     const navigate = useNavigate();
 
     // Validation
-    const validateEmail = (email) => /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(email);
+    const validateEmail = (email) =>
+        /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(email);
 
     const handleChange = (e) => {
-        const { name, value, type, checked } = e.target;
-        const newValue = type === "checkbox" ? checked : value;
-
-        setFormData({ ...formData, [name]: newValue });
-
+        const { name, type, checked, value } = e.target;
+        setFormData({
+            ...formData,
+            [name]: type === "checkbox" ? checked : value,
+        });
         setErrors((prevErrors) => {
             const newErrors = { ...prevErrors };
-            // Updated validations for firstname and lastname
-            if (name === "firstname" && newValue.trim() === "") {
-                newErrors.firstname = "First name is required";
+            if (name === "fname" && value.trim() === "") {
+                newErrors.fname = "First Name is required";
             } else {
-                delete newErrors.firstname;
+                delete newErrors.fname;
             }
 
-            if (name === "lastname" && newValue.trim() === "") {
-                newErrors.lastname = "Last name is required";
+            if (name === "lname" && value.trim() === "") {
+                newErrors.lname = "Last Name is required";
             } else {
-                delete newErrors.lastname;
+                delete newErrors.lname;
             }
 
-            if (name === "email" && !validateEmail(newValue)) {
-                newErrors.email = "Invalid email address";
-            } else {
-                delete newErrors.email;
+            if (name === "email") {
+                if (value.trim() === "") {
+                    newErrors.email = "Email is required";
+                } else if (!validateEmail(value)) {
+                    newErrors.email = "Invalid email address";
+                } else {
+                    delete newErrors.email;
+                }
             }
 
-            if (name === "CollegeName" && newValue.trim() === "") {
-                newErrors.CollegeName = "College Name cannot be empty";
+            if (name === "institution_id" && value.trim() === "") {
+                newErrors.institution_id = "IC Code cannot be empty";
             } else {
-                delete newErrors.CollegeName;
+                delete newErrors.institution_id;
             }
 
             return newErrors;
         });
     };
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        // Updated submit validation to check firstname and lastname
-        if (
-            Object.keys(errors).length === 0 &&
-            formData.firstname &&
-            formData.lastname &&
-            formData.email &&
-            formData.CollegeName
-        ) {
-            setSubmitted(true);
-            console.log("Form submitted:", formData);
-            setFormData({
-                firstname: "",
-                lastname: "",
-                email: "",
-                CollegeName: "",
-                icCode: "",
-                termsAccepted: false,
+    const handleRegister = async () => {
+        try {
+            const response = await fetch("http://127.0.0.1:8000/api/register", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(formData),
             });
+
+            const data = await response.json();
+
+            if (response.ok) {
+                setSubmitted(true);
+                setErrorMessage("");
+                setFormData({
+                    fname: "",
+                    lname: "",
+                    email: "",
+                    institution_id: "",
+                    termsAccepted: false,
+
+                });
+            } else {
+                setErrorMessage(
+                    data.detail || "Registration failed. Please try again."
+                );
+            }
+        } catch (error) {
+            setErrorMessage("Error connecting to the server. Please try again.");
         }
     };
 
-    // Three.js Globe Setup (unchanged)
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        const newErrors = {};
+        if (!formData.fname.trim()) newErrors.fname = "First Name is required";
+        if (!formData.lname.trim()) newErrors.lname = "Last Name is required";
+        if (!formData.email.trim()) {
+            newErrors.email = "Email is required";
+        } else if (!validateEmail(formData.email)) {
+            newErrors.email = "Invalid email address";
+        }
+        if (!formData.institution_id.trim())
+            newErrors.institution_id = "Institution ID cannot be empty";
+
+        setErrors(newErrors);
+
+        if (Object.keys(newErrors).length === 0) {
+            handleRegister();
+        }
+    };
+
+    // Three.js Globe Setup
     const globeRef = useRef(null);
     const rendererRef = useRef(null);
     const sphereRef = useRef(null);
 
     useEffect(() => {
         const scene = new THREE.Scene();
-        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const camera = new THREE.PerspectiveCamera(
+            75,
+            window.innerWidth / window.innerHeight,
+            0.1,
+            1000
+        );
         camera.position.z = 5;
 
         const renderer = new THREE.WebGLRenderer({
@@ -166,7 +207,9 @@ const RegistrationForm = () => {
             <div className="flex-1 w-full lg:w-2/5 p-4 lg:p-8 flex items-center justify-center min-h-[50vh]">
                 <div className="w-full max-w-[90%] lg:max-w-[400px] space-y-4 lg:space-y-6 pb-4">
                     <div className="flex justify-between items-center">
-                        <h2 className="text-lg lg:text-xl font-medium text-cyan-400">REGISTER</h2>
+                        <h2 className="text-lg lg:text-xl font-medium text-cyan-400">
+                            REGISTER
+                        </h2>
                         <button
                             onClick={() => navigate("/")}
                             className="bg-black text-cyan-400 px-3 py-1 rounded-md text-xs lg:text-sm hover:bg-gray-800"
@@ -176,7 +219,12 @@ const RegistrationForm = () => {
                     </div>
 
                     {submitted && (
-                        <p className="text-green-500 text-center">Form submitted successfully!</p>
+                        <p className="text-green-500 text-center">
+                            Registration successful!
+                        </p>
+                    )}
+                    {errorMessage && (
+                        <p className="text-red-500 text-center">{errorMessage}</p>
                     )}
 
                     <form onSubmit={handleSubmit} className="space-y-4">
@@ -184,24 +232,28 @@ const RegistrationForm = () => {
                             <label className="block text-cyan-400 text-sm">First Name</label>
                             <input
                                 type="text"
-                                name="firstname"
-                                value={formData.firstname}
+                                name="fname"
+                                value={formData.fname}
                                 onChange={handleChange}
                                 className="w-full p-2 bg-gray-700 text-white rounded-md focus:outline-none focus:border-cyan-400"
                             />
-                            {errors.firstname && <p className="text-red-500 text-sm">{errors.firstname}</p>}
+                            {errors.fname && (
+                                <p className="text-red-500 text-sm">{errors.fname}</p>
+                            )}
                         </div>
 
                         <div>
                             <label className="block text-cyan-400 text-sm">Last Name</label>
                             <input
                                 type="text"
-                                name="lastname"
-                                value={formData.lastname}
+                                name="lname"
+                                value={formData.lname}
                                 onChange={handleChange}
                                 className="w-full p-2 bg-gray-700 text-white rounded-md focus:outline-none focus:border-cyan-400"
                             />
-                            {errors.lastname && <p className="text-red-500 text-sm">{errors.lastname}</p>}
+                            {errors.lname && (
+                                <p className="text-red-500 text-sm">{errors.lname}</p>
+                            )}
                         </div>
 
                         <div>
@@ -213,20 +265,8 @@ const RegistrationForm = () => {
                                 onChange={handleChange}
                                 className="w-full p-2 bg-gray-700 text-white rounded-md focus:outline-none focus:border-cyan-400"
                             />
-                            {errors.email && <p className="text-red-500 text-sm">{errors.email}</p>}
-                        </div>
-
-                        <div>
-                            <label className="block text-cyan-400 text-sm">College Name</label>
-                            <textarea
-                                name="CollegeName"
-                                value={formData.CollegeName}
-                                onChange={handleChange}
-                                className="w-full p-2 bg-gray-700 text-white rounded-md focus:outline-none focus:border-cyan-400"
-                                rows="3"
-                            />
-                            {errors.CollegeName && (
-                                <p className="text-red-500 text-sm">{errors.CollegeName}</p>
+                            {errors.email && (
+                                <p className="text-red-500 text-sm">{errors.email}</p>
                             )}
                         </div>
 
@@ -234,11 +274,14 @@ const RegistrationForm = () => {
                             <label className="block text-cyan-400 text-sm">IC Code</label>
                             <input
                                 type="text"
-                                name="icCode"
-                                value={formData.icCode}
+                                name="institution_id"
+                                value={formData.institution_id}
                                 onChange={handleChange}
                                 className="w-full p-2 bg-gray-700 text-white rounded-md focus:outline-none focus:border-cyan-400"
                             />
+                            {errors.institution_id && (
+                                <p className="text-red-500 text-sm">{errors.institution_id}</p>
+                            )}
                         </div>
 
                         <div className="flex items-center gap-2">
